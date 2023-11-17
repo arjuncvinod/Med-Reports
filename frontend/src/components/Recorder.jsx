@@ -1,7 +1,6 @@
 import React,{useState} from "react";
 // import AudioTimer from "./AudioTimer";
 import { ReactMic } from "react-mic";
-import axios from "axios";
 
 const ReactRecorder = () => {
   // const [isRunning, setIsRunning] = React.useState(false);
@@ -22,20 +21,7 @@ const myFile = new File(
     "demo.mp4",
     { type: 'video/mp4' }
 );
-const formData = new FormData();
-formData.append("file", myFile);
 
-await axios
-  .post("http://localhost/upload", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  })
-  .then(() => {
-    console.log("success");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-  }
   const startHandle = () => {
     // setElapsedTime(0);
     // setIsRunning(true);
@@ -113,7 +99,29 @@ await axios
         </div>
       </div>
     // </div>
-        );
+  );
   
-        }
+
+    const submitData = async (e) => {
+
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", file);
+
+      await axios
+      .post("l/item", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      })
+      .then(() => {
+        enqueueSnackbar("Item Posted Successfully", { variant: "success" });
+        navigate("/find");
+      })
+      .catch((err) => {
+        console.log(err);
+        enqueueSnackbar("Error", { variant: "error" });
+        setBtn(true);
+        
+      });
+};
+
 export default ReactRecorder;
